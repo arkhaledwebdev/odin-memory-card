@@ -1,6 +1,5 @@
 async function getRandomPokemons() {
   const pokemonsIds = getRandomPokemonIds();
-  console.log(pokemonsIds);
   const pokemonPromise = pokemonsIds.map(async (pokemonId) => {
     const response = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
@@ -31,19 +30,14 @@ function getRandomPokemonIds() {
 }
 
 function shufflePokemons(pokemonList) {
-  const shuffledPokemons = pokemonList.slice();
+  const shuffledPokemons = [...pokemonList];
   for (let i = shuffledPokemons.length - 1; i > 0; i--) {
-    // Generate a random index between 0 and i
     const j = Math.floor(Math.random() * (i + 1));
-    shufflePokemons[i].id = crypto.randomUUID();
-    shufflePokemons[j].id = crypto.randomUUID();
-    // Swap elements at indices i and j
     [shuffledPokemons[i], shuffledPokemons[j]] = [
       shuffledPokemons[j],
       shuffledPokemons[i],
     ];
   }
-  console.log(shufflePokemons);
   return shuffledPokemons;
 }
 

@@ -2,15 +2,14 @@
 
 import "./pokemon_card.css";
 
-export default function PokemonCard({ id, name, image, handleClick }) {
+export default function PokemonCard({ id, name, image, onClick }) {
   return (
-    <div>
+    <div onClick={onClick}>
       <img
         key={id}
         className="card"
         src={image}
         alt={name}
-        onClick={handleClick}
       />
     </div>
   );

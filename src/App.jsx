@@ -10,26 +10,31 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       const pokemons = await getRandomPokemons();
-      setPokemonList([...pokemons]);
+      setPokemonList(pokemons);
     };
     fetchData();
   }, []);
 
   const handleClick = (pokemonId) => {
-    const clickedPokemon = pokemonList.find(
-      (pokemon) => pokemon.id === pokemonId
-    );
 
-    if (clickedPokemon.isClicked) {
-      if (score > highScore) {
-        setHighScore(score);
+    setPokemonList(prevList=>{
+    
+      const clickedPokemon = prevList.find((pokemon)=> pokemon.id === pokemonId);
+      if(clickedPokemon.isClicked){
+        if(score > highScore){
+          setHighScore(score);
+        }
+        const resetList = prevList.map((pokemon)=>({
+          ...pokemon,
+          isClicked: false
+        }));
+        setScore(0);
+        return resetList;
       }
-      setScore(0);
-    } else {
-      setScore(score + 10);
-    }
-    const shuffledPokemons = shufflePokemons(pokemonList);
-    setPokemonList([...shuffledPokemons]);
+      const updatedList = prevList.map((pokemon)=> pokemon.id == pokemonId ? {...pokemon,isClicked: true}:pokemon);
+      setScore(prevScore => prevScore + 10);
+      return shufflePokemons(updatedList);
+    })
   };
 
   const pokemonCards = pokemonList.map((pokemon) => {
@@ -38,7 +43,7 @@ export default function App() {
         key={pokemon.id}
         name={pokemon.name}
         image={pokemon.image}
-        onClick={handleClick}
+        onClick={()=> handleClick(pokemon.id)}
       />
     );
   });
